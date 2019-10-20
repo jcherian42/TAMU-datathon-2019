@@ -56,4 +56,9 @@ if __name__ == "__main__":
         fscores.append(fscore)
         print(fscore)
 
+<<<<<<< HEAD
     print('Average F-measure:', sum(fscores) / len(fscores))
+=======
+    print('Average F-measure:', sum(fscores) / len(fscores))
+    
+>>>>>>> 0ecdb87523d1584268e46df95b3b55e0e81f8a88
