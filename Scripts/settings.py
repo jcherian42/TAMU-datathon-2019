@@ -4,7 +4,7 @@ import os
 def init():
 
     os.chdir("../Data")
-    
+
     global training_data
     training_data = os.path.join(os.getcwd(), "equip_failures_training_neg_one.csv")
     global test_data
