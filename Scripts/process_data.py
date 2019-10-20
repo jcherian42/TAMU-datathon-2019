@@ -1,10 +1,12 @@
 import pandas as pd
 import numpy as np
 import settings
+from sklearn.feature_selection import RFECV
 from sklearn.model_selection import StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier
+# from sklearn.ensemble import AdaBoostClassifier
 from sklearn import svm
-from sklearn import neighbors
+# from sklearn import neighbors
 from sklearn.metrics import f1_score
 
 
@@ -38,21 +40,21 @@ if __name__ == "__main__":
     X = df.iloc[:, 2:]  # First two columns are id and target
     Y = np.array(df.iloc[:, 1])
 
-    knn = neighbors.KNeighborsClassifier(n_neighbors=5)
-    rf = RandomForestClassifier(n_estimators=100)
-    alg = svm.SVC(kernel='linear')
+    # Algorithms
+    # knn = neighbors.KNeighborsClassifier(n_neighbors=5)
+    alg = RandomForestClassifier(n_estimators=100)
+    # sv = svm.SVC(kernel='linear')
+    # ada = AdaBoostClassifier(n_estimators=100)
+    
     cv = StratifiedKFold(n_splits=10)
 
     fscores = []
     for train, test in cv.split(X, Y):
-        print('Cross Validation')
         model = alg.fit(X.iloc[train], Y[train])
-        print(1)
         Y_pred = model.predict(X.iloc[test])
-        print(2)
-        fscore = f1_score(Y[test], Y_pred, average='macro', labels=np.unique(Y[test]))
-        print(3)
+        fscore = f1_score(Y[test], Y_pred, average='weighted', labels=np.unique(Y[test]))
         fscores.append(fscore)
         print(fscore)
 
     print('Average F-measure:', sum(fscores) / len(fscores))
+    
