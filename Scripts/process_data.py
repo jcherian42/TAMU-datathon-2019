@@ -10,31 +10,37 @@ from sklearn import svm
 from sklearn.metrics import f1_score
 
 
-def clean_data(df_clean):
+def clean_data(df_clean, df_clean2):
     # Drop columns with greater than 30% of values equal to na
     columns = list(df_clean)
     for col in columns:
+        #if
+        #    x_array = np.array(df['total_bedrooms'])
+        #    normalized_X = preprocessing.normalize([x_array])
         try:
             if df_clean[col].str.count('na').sum() > (60001 * .30):
                 df_clean = df_clean.drop(columns=[col])
+                df_clean2 = df_clean2.drop(columns=[col])
         except:
             pass
     # Count na's in row and drop rows with greater than 30%
-    df_clean['sum_na'] = df_clean.apply(lambda row: sum(row[0:60000]=='na'), axis=1)
-    df_done = df_clean[~(df_clean['sum_na'] >= (172 * .3))]
-    df_done = df_done.drop(columns=['sum_na'])
-    df_done = df_done.replace('na', -1)
+    df_done = df_clean.replace('na', -1)
+    df_done2 = df_clean2.replace('na', -1)
 
-    return df_done
+    return df_done, df_done2
 
 
 def gen_output(predictions):
     # columns = ['id', 'target']
     pass
 
-
 if __name__ == "__main__":
     settings.init()
+    df_train = pd.read_csv(settings.training_data)
+    df_test = pd.read_csv(settings.test_data)
+    d1, d2 = clean_data(df_train, df_test)
+    d1.to_csv('equip_failures_train_clean.csv')
+    d2.to_csv('equip_failures_test_clean.csv')
 
     df = pd.read_csv(settings.training_data_cleaned)
     X = df.iloc[:, 2:]  # First two columns are id and target
@@ -56,9 +62,5 @@ if __name__ == "__main__":
         fscores.append(fscore)
         print(fscore)
 
-<<<<<<< HEAD
     print('Average F-measure:', sum(fscores) / len(fscores))
-=======
-    print('Average F-measure:', sum(fscores) / len(fscores))
-    
->>>>>>> 0ecdb87523d1584268e46df95b3b55e0e81f8a88
+
