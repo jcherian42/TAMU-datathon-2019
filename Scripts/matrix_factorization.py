@@ -1,6 +1,7 @@
 import pandas as pd
 import settings
 import numpy as np
+import pickle
 
 
 
@@ -109,11 +110,14 @@ if __name__ == "__main__":
     df_drop = df_drop.replace(-1,0)
 
     np_drop = df_drop.to_numpy()
-    mf = MF(np_drop, K=2, alpha=0.1, beta=0.01, iterations=20)
+    mf = MF(np_drop, K=2, alpha=0.1, beta=0.01, iterations=500)
     training_process = mf.train()
     print(mf.P)
     print(mf.Q)
-    print(mf.full_matrix())
+    with open('new_matrix.pickle', 'wb') as handle:
+        pickle.dump(handle, mf.full_matrix)
+
+    # print(mf.full_matrix())
 
     '''X_training = df_training.iloc[:, 2:]  # First two columns are id and target
     Y_training = np.array(df_training.iloc[:, 1])
